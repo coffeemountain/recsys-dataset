@@ -19,7 +19,7 @@ class setEncoder(json.JSONEncoder):
 
 
 @beartype
-def split_events(events: list[dict], split_idx=None):
+def split_events(events, split_idx=None):
     test_events = ground_truth(deepcopy(events))
     if not split_idx:
         split_idx = random.randint(1, len(test_events))

@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 
 
 @beartype
-def prepare_predictions(predictions: list[str]):
+def prepare_predictions(predictions):
     prepared_predictions = dict()
     for prediction in tqdm(predictions, desc="Preparing predictions"):
         sid_type, preds = prediction.strip().split(",")
@@ -21,7 +21,7 @@ def prepare_predictions(predictions: list[str]):
 
 
 @beartype
-def prepare_labels(labels: list[str]):
+def prepare_labels(labels):
     final_labels = dict()
     for label in tqdm(labels, desc="Preparing labels"):
         label = json.loads(label)
