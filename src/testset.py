@@ -31,7 +31,7 @@ def split_events(events, split_idx=None):
 
 
 @beartype
-def create_kaggle_testset(sessions: pd.DataFrame, sessions_output: Path, labels_output: Path):
+def create_kaggle_testset(sessions, sessions_output, labels_output):
     last_labels = []
     splitted_sessions = []
 
@@ -51,13 +51,13 @@ def create_kaggle_testset(sessions: pd.DataFrame, sessions_output: Path, labels_
 
 
 @beartype
-def trim_session(session: dict, max_ts: int) -> dict:
+def trim_session(session, max_ts) -> dict:
     session['events'] = [event for event in session['events'] if event['ts'] < max_ts]
     return session
 
 
 @beartype
-def get_max_ts(sessions_path: Path) -> int:
+def get_max_ts(sessions_path) -> int:
     max_ts = float('-inf')
     with open(sessions_path) as f:
         for line in tqdm(f, desc="Finding max timestamp"):
@@ -67,7 +67,7 @@ def get_max_ts(sessions_path: Path) -> int:
 
 
 @beartype
-def filter_unknown_items(session_path: Path, known_items: set[int]):
+def filter_unknown_items(session_path, known_items):
     filtered_sessions = []
     with open(session_path) as f:
         for line in tqdm(f, desc="Filtering unknown items"):
@@ -81,7 +81,7 @@ def filter_unknown_items(session_path: Path, known_items: set[int]):
 
 
 @beartype
-def train_test_split(session_chunks: JsonReader, train_path: Path, test_path: Path, max_ts: int, test_days: int):
+def train_test_split(session_chunks, train_path, test_path, max_ts, test_days):
     split_millis = test_days * 24 * 60 * 60 * 1000
     split_ts = max_ts - split_millis
     train_items = set()
@@ -105,7 +105,7 @@ def train_test_split(session_chunks: JsonReader, train_path: Path, test_path: Pa
 
 
 @beartype
-def main(train_set: Path, output_path: Path, days: int, seed: int):
+def main(train_set, output_path, days, seed):
     random.seed(seed)
     max_ts = get_max_ts(train_set)
 

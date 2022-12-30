@@ -34,7 +34,7 @@ def prepare_labels(labels):
 
 
 @beartype
-def evaluate_session(labels: dict, prediction: dict, k: int):
+def evaluate_session(labels, prediction, k):
     if 'clicks' in labels and labels['clicks'] and 'clicks' in prediction and prediction['clicks']:
         clicks_hit = float(labels['clicks'] in prediction['clicks'][:k])
     else:
@@ -54,7 +54,7 @@ def evaluate_session(labels: dict, prediction: dict, k: int):
 
 
 @beartype
-def evaluate_sessions(labels: dict[str, dict], predictions: dict[int, dict], k: int):
+def evaluate_sessions(labels, predictions, k):
     result = {}
     for session_id, session_labels in tqdm(labels.items(), desc="Evaluating sessions"):
         if session_id in predictions:
@@ -65,7 +65,7 @@ def evaluate_sessions(labels: dict[str, dict], predictions: dict[int, dict], k: 
 
 
 @beartype
-def num_events(labels: dict[int, dict], k: int):
+def num_events(labels, k):
     num_clicks = 0
     num_carts = 0
     num_orders = 0
@@ -80,7 +80,7 @@ def num_events(labels: dict[int, dict], k: int):
 
 
 @beartype
-def recall_by_event_type(evalutated_events: dict, total_number_events: dict):
+def recall_by_event_type(evalutated_events, total_number_events):
     clicks = 0
     carts = 0
     orders = 0
@@ -100,7 +100,7 @@ def recall_by_event_type(evalutated_events: dict, total_number_events: dict):
 
 
 @beartype
-def weighted_recalls(recalls: dict, weights: dict):
+def weighted_recalls(recalls, weights):
     result = 0.0
     for event, recall in recalls.items():
         result += recall * weights[event]
@@ -108,8 +108,8 @@ def weighted_recalls(recalls: dict, weights: dict):
 
 
 @beartype
-def get_scores(labels: dict[int, dict],
-               predictions: dict[int, dict],
+def get_scores(labels,
+               predictions,
                k=20,
                weights={
                    'clicks': 0.10,
@@ -134,7 +134,7 @@ def get_scores(labels: dict[int, dict],
 
 
 @beartype
-def main(labels_path: Path, predictions_path: Path):
+def main(labels_path, predictions_path):
     with open(labels_path, "r") as f:
         logging.info(f"Reading labels from {labels_path}")
         labels = f.readlines()
